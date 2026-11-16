@@ -1,8 +1,10 @@
 package lib.registry;
 import lib.models.ExpenseType;
-import lib.rules.ExpenseRule;
-import lib.rules.imp.DisallowRule;
-import lib.rules.imp.maxAmountRule;
+import lib.services.rules.ExpenseRule;
+import lib.services.rules.TripRule;
+import lib.services.rules.imp.DisallowRule;
+import lib.services.rules.imp.TripTotalMaxRule;
+import lib.services.rules.imp.maxAmountRule;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +17,7 @@ no single expense can exceed 250
 */
 public class RuleRegistry {
     
-    public static void getExpenseRuleRegistry(){
+    public static Map<ExpenseType, List<ExpenseRule>> getExpenseRuleRegistry(){
         Map<ExpenseType, List<ExpenseRule>> registry= new HashMap<>();
 
         registry.put(ExpenseType.RESTAURANT, List.of( new maxAmountRule(75)));
@@ -23,10 +25,17 @@ public class RuleRegistry {
         registry.put(ExpenseType.AIRFARE, List.of(new DisallowRule()));
 
         registry.put(ExpenseType.ENTERTAINMENT, List.of(new DisallowRule()));
+
+        return registry;
     }
 
     public static List<ExpenseRule> getAllExpenseRuleRegistry(){
 
         return List.of(new maxAmountRule(200));
+    }
+
+    public static List<TripRule> tripRuleRegistry(){
+
+        return List.of(new TripTotalMaxRule(1000));
     }
 }
